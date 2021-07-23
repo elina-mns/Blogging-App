@@ -27,6 +27,9 @@ class TabBarViewController: UITabBarController {
         navigationControllerForProfile.navigationBar.prefersLargeTitles = true
         navigationControllerForHome.navigationBar.prefersLargeTitles = true
         
+        navigationControllerForHome.tabBarItem = UITabBarItem(title: "Home", image: UIImage(systemName: "house"), tag: 1)
+        navigationControllerForProfile.tabBarItem = UITabBarItem(title: "Profile", image: UIImage(systemName: "person.circle"), tag: 2)
+        
         setViewControllers([navigationControllerForHome, navigationControllerForProfile], animated: true)
     }
 }

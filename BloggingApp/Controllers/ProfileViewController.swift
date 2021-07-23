@@ -11,7 +11,16 @@ class ProfileViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        view.backgroundColor = .systemBackground
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+            title: "Sign Out",
+            style: .done,
+            target: self,
+            action: #selector(didTapSignOut))
+    }
+    
+    @objc func didTapSignOut() {
+        
     }
 
 
