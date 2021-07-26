@@ -14,4 +14,20 @@ final class DatabaseManager {
     private let database = Firestore.firestore()
     
     private init() { }
+    
+    func addBlogPost(withPost post: BlogPost, user: User, completion: @escaping (Bool) -> Void) {
+    
+    }
+    
+    func getAllPosts(completion: @escaping ([BlogPost]) -> Void) {
+        
+    }
+    
+    func getAllPostsForUser(forUser user: User, completion: @escaping ([BlogPost]) -> Void) {
+        
+    }
+    
+    func addUser(user: User, completion: @escaping (Bool) -> Void) {
+        
+    }
 }
