@@ -107,6 +107,8 @@ class SignUpViewController: UITabBarController {
                 let newUser = User(name: name, email: email, profilePictureURL: nil)
                 DatabaseManager.shared.addUser(user: newUser) { userAdded in
                     guard userAdded else { return }
+                    UserDefaults.standard.set(email, forKey: "email")
+                    UserDefaults.standard.set(name, forKey: "name")
                     DispatchQueue.main.async {
                         let vc = TabBarViewController()
                         vc.modalPresentationStyle = .fullScreen
