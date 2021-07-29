@@ -19,7 +19,10 @@ class SignInViewController: UITabBarController {
        let field = UITextField()
         field.keyboardType = .emailAddress
         field.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: 50))
-        field.placeholder = "   Email"
+        field.placeholder = "Email"
+        field.autocapitalizationType = .none
+        field.autocorrectionType = .no
+        field.leftViewMode = .always
         field.backgroundColor = .secondarySystemBackground
         field.layer.cornerRadius = 8
         field.layer.masksToBounds = true
@@ -30,8 +33,11 @@ class SignInViewController: UITabBarController {
     private let passwordField: UITextField = {
        let field = UITextField()
         field.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: 50))
-        field.placeholder = "   Password"
+        field.placeholder = "Password"
+        field.autocapitalizationType = .none
+        field.autocorrectionType = .no
         field.isSecureTextEntry = true
+        field.leftViewMode = .always
         field.backgroundColor = .secondarySystemBackground
         field.layer.cornerRadius = 8
         field.layer.masksToBounds = true
@@ -89,7 +95,9 @@ class SignInViewController: UITabBarController {
     }
     
     @objc func didTapCreateAccount() {
-        
+        let vc = SignUpViewController()
+        vc.title = "Create Account"
+        navigationController?.pushViewController(vc, animated: true)
     }
     
     
