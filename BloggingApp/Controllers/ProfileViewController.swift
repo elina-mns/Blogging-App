@@ -8,10 +8,59 @@
 import UIKit
 
 class ProfileViewController: UIViewController {
-
+    
+    //Profile Photo
+    
+    //User's Full Name
+    
+    //Email address
+    
+    //Lists of posts
+    
+    private var tableView: UITableView = {
+        let tableView = UITableView()
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        return tableView
+    }()
+    
+    let currentEmail: String
+    
+    init(currentEmail: String) {
+        self.currentEmail = currentEmail
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
+        setUpSignOutButton()
+        setUpTable()
+        title = currentEmail
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        tableView.frame = view.bounds
+    }
+    
+    private func setUpTable() {
+        view.addSubview(tableView)
+        tableView.delegate = self
+        tableView.dataSource = self
+        setUpTableHeader()
+    }
+    
+    private func setUpTableHeader() {
+        //Profile Picture
+        
+        //Name
+    }
+    
+    private func setUpSignOutButton() {
         navigationItem.rightBarButtonItem = UIBarButtonItem(
             title: "Sign Out",
             style: .done,
@@ -42,4 +91,21 @@ class ProfileViewController: UIViewController {
         }))
         present(alert, animated: true)
     }
+}
+
+        //MARK: Table View Methods
+
+extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 10
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        cell.textLabel?.text = "Blog posts!"
+        return cell
+    }
+    
+    
 }

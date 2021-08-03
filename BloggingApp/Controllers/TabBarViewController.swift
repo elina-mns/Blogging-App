@@ -11,14 +11,18 @@ class TabBarViewController: UITabBarController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .systemBackground
         setUpControllers()
     }
     
     private func setUpControllers() {
+        guard let currentUserEmail = UserDefaults.standard.string(forKey: "email") else { return }
+        
         let home = HomeViewController()
         home.title = "Home"
-        let profile = ProfileViewController()
+        let profile = ProfileViewController(currentEmail: currentUserEmail)
         profile.title = "Profile"
+        
         home.navigationItem.largeTitleDisplayMode = .always
         profile.navigationItem.largeTitleDisplayMode = .always
         
