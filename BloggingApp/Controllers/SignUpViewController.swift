@@ -61,7 +61,7 @@ class SignUpViewController: UITabBarController {
     //Create Account Button
     private let createAccountButton: UIButton = {
        let button = UIButton()
-        button.backgroundColor = UIColor(red: 39/255.0, green: 39/255.0, blue: 39/255.0, alpha: 1)
+        button.backgroundColor = Colors().createAccountColor
         button.setTitle("Create Account", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 16, weight: .semibold)

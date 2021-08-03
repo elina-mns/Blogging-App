@@ -81,7 +81,7 @@ class ProfileViewController: UIViewController {
             style: .done,
             target: self,
             action: #selector(didTapSignOut))
-        navigationItem.rightBarButtonItem?.tintColor = UIColor(red: 137/255.0, green: 136/255.0, blue: 185/255.0, alpha: 1)
+        navigationItem.rightBarButtonItem?.tintColor = Colors().darkViolet
     }
     
     @objc func didTapSignOut() {
