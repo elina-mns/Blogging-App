@@ -53,9 +53,10 @@ class ProfileViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         setUpTableHeader()
+        fetchProfileData()
     }
     
-    private func setUpTableHeader() {
+    private func setUpTableHeader(profilePictureURL: URL? = nil, name: String? = nil) {
         //Header View
         let headerView = UIView(frame: CGRect(x: 0, y: 0, width: view.width, height: view.width))
         headerView.backgroundColor = UIColor(red: 228/255.0, green: 228/255.0, blue: 249/255.0, alpha: 1)
@@ -64,7 +65,7 @@ class ProfileViewController: UIViewController {
         
         //Profile Picture
         let profilePicture = UIImageView(image: UIImage(systemName: "person.circle"))
-        profilePicture.tintColor = .black
+        profilePicture.tintColor = .lightGray
         profilePicture.contentMode = .scaleAspectFit
         headerView.addSubview(profilePicture)
         profilePicture.frame = CGRect(x: (view.width-(view.width/4))/2,
@@ -72,7 +73,23 @@ class ProfileViewController: UIViewController {
                                       width: view.width/4,
                                       height: view.width/4)
         
-        //Name
+        //Email
+        let emailLabel = UILabel(frame: CGRect(x: 20, y: profilePicture.bottom + 20, width: view.width - 40, height: 100))
+        headerView.addSubview(emailLabel)
+        emailLabel.text = currentEmail
+        emailLabel.textAlignment = .center
+        emailLabel.font = .systemFont(ofSize: 25, weight: .medium)
+        
+        if let name = name {
+            title = name
+        }
+        if let url = profilePictureURL {
+            //Fetch image
+        }
+    }
+    
+    private func fetchProfileData() {
+        
     }
     
     private func setUpSignOutButton() {
