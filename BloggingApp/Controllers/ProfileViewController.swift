@@ -40,6 +40,7 @@ class ProfileViewController: UIViewController {
         setUpSignOutButton()
         setUpTable()
         title = currentEmail
+        navigationController?.tabBarItem.title = "Profile"
     }
     
     override func viewDidLayoutSubviews() {
@@ -55,7 +56,21 @@ class ProfileViewController: UIViewController {
     }
     
     private func setUpTableHeader() {
+        //Header View
+        let headerView = UIView(frame: CGRect(x: 0, y: 0, width: view.width, height: view.width))
+        headerView.backgroundColor = UIColor(red: 228/255.0, green: 228/255.0, blue: 249/255.0, alpha: 1)
+        tableView.tableHeaderView = headerView
+        headerView.clipsToBounds = true
+        
         //Profile Picture
+        let profilePicture = UIImageView(image: UIImage(systemName: "person.circle"))
+        profilePicture.tintColor = .black
+        profilePicture.contentMode = .scaleAspectFit
+        headerView.addSubview(profilePicture)
+        profilePicture.frame = CGRect(x: (view.width-(view.width/4))/2,
+                                      y: (headerView.height-(view.width/4))/1.8,
+                                      width: view.width/4,
+                                      height: view.width/4)
         
         //Name
     }
@@ -66,6 +81,7 @@ class ProfileViewController: UIViewController {
             style: .done,
             target: self,
             action: #selector(didTapSignOut))
+        navigationItem.rightBarButtonItem?.tintColor = UIColor(red: 137/255.0, green: 136/255.0, blue: 185/255.0, alpha: 1)
     }
     
     @objc func didTapSignOut() {

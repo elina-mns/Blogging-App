@@ -31,8 +31,11 @@ class TabBarViewController: UITabBarController {
         navigationControllerForProfile.navigationBar.prefersLargeTitles = true
         navigationControllerForHome.navigationBar.prefersLargeTitles = true
         
+        
         navigationControllerForHome.tabBarItem = UITabBarItem(title: "Home", image: UIImage(systemName: "house"), tag: 1)
+        navigationControllerForHome.tabBarItem.badgeColor = UIColor(red: 137/255.0, green: 136/255.0, blue: 185/255.0, alpha: 1)
         navigationControllerForProfile.tabBarItem = UITabBarItem(title: "Profile", image: UIImage(systemName: "person.circle"), tag: 2)
+        navigationControllerForProfile.tabBarItem.badgeColor = UIColor(red: 137/255.0, green: 136/255.0, blue: 185/255.0, alpha: 1)
         
         setViewControllers([navigationControllerForHome, navigationControllerForProfile], animated: true)
     }
