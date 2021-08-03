@@ -9,6 +9,8 @@ import UIKit
 
 class ProfileViewController: UIViewController {
     
+    //MARK: Properties
+    
     private var tableView: UITableView = {
         let tableView = UITableView()
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
@@ -33,7 +35,6 @@ class ProfileViewController: UIViewController {
         view.backgroundColor = .systemBackground
         setUpSignOutButton()
         setUpTable()
-        title = currentEmail
         navigationController?.tabBarItem.title = "Profile"
     }
     
@@ -55,17 +56,23 @@ class ProfileViewController: UIViewController {
         let headerView = UIView(frame: CGRect(x: 0, y: 0, width: view.width, height: view.width))
         headerView.backgroundColor = UIColor(red: 228/255.0, green: 228/255.0, blue: 249/255.0, alpha: 1)
         tableView.tableHeaderView = headerView
+        headerView.isUserInteractionEnabled = true
         headerView.clipsToBounds = true
         
         //Profile Picture
         let profilePicture = UIImageView(image: UIImage(systemName: "person.circle"))
         profilePicture.tintColor = .lightGray
         profilePicture.contentMode = .scaleAspectFit
+        profilePicture.isUserInteractionEnabled = true
         headerView.addSubview(profilePicture)
         profilePicture.frame = CGRect(x: (view.width-(view.width/4))/2,
                                       y: (headerView.height-(view.width/4))/1.8,
                                       width: view.width/4,
                                       height: view.width/4)
+        
+        //Tap on Profile Picture to set a Picture
+        let tap = UITapGestureRecognizer(target: self, action: #selector(didTapProfilePicture))
+        profilePicture.addGestureRecognizer(tap)
         
         //Email
         let emailLabel = UILabel(frame: CGRect(x: 20, y: profilePicture.bottom + 20, width: view.width - 40, height: 100))
@@ -80,6 +87,18 @@ class ProfileViewController: UIViewController {
         if let url = profilePictureRef {
             //Fetch image
         }
+    }
+    
+    @objc func didTapProfilePicture() {
+        //"Guard" so user can't change other users' profile pictures
+        guard let myEmail = UserDefaults.standard.string(forKey: "email"),
+              myEmail != currentEmail else { return }
+        
+        let picker = UIImagePickerController()
+        picker.sourceType = .photoLibrary
+        picker.delegate = self
+        picker.allowsEditing = true
+        present(picker, animated: true)
     }
     
     private func fetchProfileData() {
@@ -139,6 +158,23 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
         cell.textLabel?.text = "Blog posts!"
         return cell
     }
+}
+ 
+        //MARK: Image Picker Methods
+
+extension ProfileViewController: UIImagePickerControllerDelegate & UINavigationControllerDelegate {
     
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        picker.dismiss(animated: true, completion: nil)
+    }
     
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        
+        picker.dismiss(animated: true, completion: nil)
+        guard let image = info[.editedImage] as? UIImage else { return }
+        
+        StorageManager.shared.uploadUserProfilePicture(email: currentEmail, image: image) { success in
+            
+        }
+    }
 }
