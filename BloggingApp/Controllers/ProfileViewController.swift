@@ -18,6 +18,7 @@ class ProfileViewController: UIViewController {
     }()
     private var user: User?
     let currentEmail: String
+    private var posts: [BlogPost] = []
     
     //MARK: Initializers
     
@@ -69,6 +70,8 @@ class ProfileViewController: UIViewController {
                                       y: (headerView.height-(view.width/4))/1.8,
                                       width: view.width/4,
                                       height: view.width/4)
+        profilePicture.layer.masksToBounds = true
+        profilePicture.layer.cornerRadius = profilePicture.width/2
         
         //Tap on Profile Picture to set a Picture
         let tap = UITapGestureRecognizer(target: self, action: #selector(didTapProfilePicture))
@@ -84,8 +87,17 @@ class ProfileViewController: UIViewController {
         if let name = name {
             title = name
         }
-        if let url = profilePictureRef {
-            //Fetch image
+        if let ref = profilePictureRef {
+            StorageManager.shared.downloadURLForProfilePicture(path: ref) { url in
+                guard let url = url else { return }
+                let task = URLSession.shared.dataTask(with: url) { data, _, _ in
+                    guard let data = data else { return }
+                    DispatchQueue.main.async {
+                        profilePicture.image = UIImage(data: data)
+                    }
+                }
+                task.resume()
+            }
         }
     }
     
@@ -149,14 +161,26 @@ class ProfileViewController: UIViewController {
 
 extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
     
+    func fetchPosts() {
+        
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
+        return posts.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let post = posts[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         cell.textLabel?.text = "Blog posts!"
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        let vc = ViewPostViewController()
+        vc.title = posts[indexPath.row].title
+        navigationController?.pushViewController(vc, animated: true)
     }
 }
  
@@ -173,8 +197,17 @@ extension ProfileViewController: UIImagePickerControllerDelegate & UINavigationC
         picker.dismiss(animated: true, completion: nil)
         guard let image = info[.editedImage] as? UIImage else { return }
         
-        StorageManager.shared.uploadUserProfilePicture(email: currentEmail, image: image) { success in
-            
+        StorageManager.shared.uploadUserProfilePicture(email: currentEmail, image: image) { [weak self] success in
+            guard let strongSelf = self else { return }
+            if success {
+                //update database
+                DatabaseManager.shared.updateProfilePhoto(email: strongSelf.currentEmail) { updated in
+                    guard updated else { return }
+                    DispatchQueue.main.async {
+                        strongSelf.fetchProfileData()
+                    }
+                }
+            }
         }
     }
 }

@@ -33,8 +33,11 @@ final class StorageManager {
             }
     }
     
-    func downloadURLForProfilePicture(user: User, completion: @escaping (URL?) -> Void) {
-        
+    func downloadURLForProfilePicture(path: String, completion: @escaping (URL?) -> Void) {
+        container.reference(withPath: path)
+            .downloadURL { url, _ in
+                completion(url)
+            }
     }
     
     func uploadHeaderImage(post: BlogPost, image: UIImage, completion: @escaping (Bool) -> Void) {

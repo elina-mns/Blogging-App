@@ -9,10 +9,9 @@ import Foundation
 import FirebaseFirestore
 
 final class DatabaseManager {
+    
     static let shared = DatabaseManager()
-    
     private let database = Firestore.firestore()
-    
     private init() { }
     
     func addBlogPost(withPost post: BlogPost, user: User, completion: @escaping (Bool) -> Void) {
@@ -60,6 +59,22 @@ final class DatabaseManager {
                 let user = User(name: name, email: email, profilePictureReference: reference)
                 completion(user)
             }
+    }
+    
+    func updateProfilePhoto(email: String, completion: @escaping (Bool) -> Void) {
+        let path = email
+            .replacingOccurrences(of: "@", with: "_")
+            .replacingOccurrences(of: ".", with: "_")
         
+        let photoReference = "profile_pictures/\(path)/photo.png"
+        let databaseReference = database.collection("users").document(path)
+        
+        databaseReference.getDocument { snapshot, error in
+            guard var data = snapshot?.data(), error == nil else { return }
+            data["profile_photo"] = photoReference
+            databaseReference.setData(data) { error in
+                completion(error == nil)
+            }
+        }
     }
 }
