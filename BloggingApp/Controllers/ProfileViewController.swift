@@ -9,21 +9,15 @@ import UIKit
 
 class ProfileViewController: UIViewController {
     
-    //Profile Photo
-    
-    //User's Full Name
-    
-    //Email address
-    
-    //Lists of posts
-    
     private var tableView: UITableView = {
         let tableView = UITableView()
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         return tableView
     }()
-    
+    private var user: User?
     let currentEmail: String
+    
+    //MARK: Initializers
     
     init(currentEmail: String) {
         self.currentEmail = currentEmail
@@ -56,7 +50,7 @@ class ProfileViewController: UIViewController {
         fetchProfileData()
     }
     
-    private func setUpTableHeader(profilePictureURL: URL? = nil, name: String? = nil) {
+    private func setUpTableHeader(profilePictureRef: String? = nil, name: String? = nil) {
         //Header View
         let headerView = UIView(frame: CGRect(x: 0, y: 0, width: view.width, height: view.width))
         headerView.backgroundColor = UIColor(red: 228/255.0, green: 228/255.0, blue: 249/255.0, alpha: 1)
@@ -83,13 +77,19 @@ class ProfileViewController: UIViewController {
         if let name = name {
             title = name
         }
-        if let url = profilePictureURL {
+        if let url = profilePictureRef {
             //Fetch image
         }
     }
     
     private func fetchProfileData() {
-        
+        DatabaseManager.shared.getUser(email: currentEmail) { [weak self] user in
+            guard let user = user else { return }
+            self?.user = user
+            DispatchQueue.main.async {
+                self?.setUpTableHeader(profilePictureRef: user.profilePictureReference, name: user.name)
+            }
+        }
     }
     
     private func setUpSignOutButton() {
