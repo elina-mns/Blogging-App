@@ -37,7 +37,11 @@ class CreateNewPostViewController: UITabBarController {
         return headerImageView
     }()
     
-    private var selectedHeaderImage: UIImage!
+    private var selectedHeaderImage: UIImageView = {
+        let imageView = UIImageView()
+        imageView.layer.cornerRadius = 8
+        return imageView
+    }()
     
     //TextView for the post
     private var contentTextView: UITextView = {
@@ -92,16 +96,25 @@ class CreateNewPostViewController: UITabBarController {
     }
     
     @objc func didTapPost() {
-        guard let title = titleField.text,
+        guard let email = UserDefaults.standard.string(forKey: "email"),
+              let title = titleField.text,
               let body = contentTextView.text,
-              let image = selectedHeaderImage,
+              let image = selectedHeaderImage.image,
               !title.trimmingCharacters(in: .whitespaces).isEmpty,
               !body.trimmingCharacters(in: .whitespaces).isEmpty else { return }
         
+        let postId = UUID().uuidString
         //Upload header image
-        //Insert post into DB
-        
-        let post = BlogPost(id: UUID().uuidString, title: title, timestamp: Date().timeIntervalSince1970, headerImageURL: nil, text: body)
+        StorageManager.shared.uploadHeaderImage(email: email, postId: postId, image: image) { success in
+            guard success else { return }
+            StorageManager.shared.downloadURLForPostHeader(email: email, postId: postId) { url in
+                guard let headerURL = url else { return }
+                
+                //Insert post into DB
+                let post = BlogPost(id: postId, title: title, timestamp: Date().timeIntervalSince1970, headerImageURL: headerURL, text: body)
+            }
+        }
+     
     }
     
 }
@@ -117,7 +130,7 @@ extension CreateNewPostViewController: UIImagePickerControllerDelegate & UINavig
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         picker.dismiss(animated: true, completion: nil)
         guard let image = info[.originalImage] as? UIImage else { return }
-        selectedHeaderImage = image
+        selectedHeaderImage.image = image
         headerImageView.image = image
     }
 }
