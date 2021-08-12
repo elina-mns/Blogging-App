@@ -14,16 +14,61 @@ final class DatabaseManager {
     private let database = Firestore.firestore()
     private init() { }
     
-    func addBlogPost(withPost post: BlogPost, user: User, completion: @escaping (Bool) -> Void) {
-    
+    func addBlogPost(withPost post: BlogPost, email: String, completion: @escaping (Bool) -> Void) {
+        let userEmail = email
+            .replacingOccurrences(of: ".", with: "_")
+            .replacingOccurrences(of: "@", with: "_")
+        
+        let data: [String: Any] = [
+            "id": post.id,
+            "title": post.title,
+            "body": post.text,
+            "created": post.timestamp,
+            "headerImageUrl": post.headerImageURL?.absoluteString ?? ""
+        ]
+        database
+            .collection("users")
+            .document(userEmail)
+            .collection("posts")
+            .document(post.id)
+            .setData(data) { error in
+                completion(error == nil)
+            
+        }
     }
     
     func getAllPosts(completion: @escaping ([BlogPost]) -> Void) {
         
     }
     
-    func getAllPostsForUser(forUser user: User, completion: @escaping ([BlogPost]) -> Void) {
-        
+    func getAllPostsForUser(forEmail email: String, completion: @escaping ([BlogPost]) -> Void) {
+        let userEmail = email
+            .replacingOccurrences(of: ".", with: "_")
+            .replacingOccurrences(of: "@", with: "_")
+        database
+            .collection("users")
+            .document(userEmail)
+            .collection("posts")
+            .getDocuments { snapshot, error in
+                guard let documents = snapshot?.documents.compactMap({ $0 .data() }),
+                      error == nil else {
+                    return
+                }
+                let posts: [BlogPost] = documents.compactMap({ dictionary in
+                    
+                    guard let id = dictionary["id"] as? String,
+                          let title = dictionary["title"] as? String,
+                          let body = dictionary["body"] as? String,
+                          let created = dictionary["created"] as? TimeInterval,
+                          let headerImage = dictionary["headerImageUrl"] as? String else {
+                        print("Invalid post fetch conversion")
+                        return nil
+                    }
+                    let post = BlogPost(id: id, title: title, timestamp: created, headerImageURL: URL(string: headerImage), text: body)
+                    return post
+                })
+                completion(posts)
+            }
     }
     
     func addUser(user: User, completion: @escaping (Bool) -> Void) {

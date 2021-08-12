@@ -47,7 +47,7 @@ class SignInViewController: UITabBarController {
     //Sign In Button
     private let signInButton: UIButton = {
        let button = UIButton()
-        button.backgroundColor = Colors().lightViolet
+        button.backgroundColor = Colors().darkViolet
         button.setTitle("Sign In", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 16, weight: .semibold)

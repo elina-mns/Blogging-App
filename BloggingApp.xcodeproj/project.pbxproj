@@ -27,6 +27,8 @@
 		31B0E2F026B1D9E900DB3930 /* FrameDimensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31B0E2EF26B1D9E900DB3930 /* FrameDimensions.swift */; };
 		31B0E2F226B3222B00DB3930 /* SignInHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31B0E2F126B3222B00DB3930 /* SignInHeaderView.swift */; };
 		31B0E2F426B9C67100DB3930 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31B0E2F326B9C67100DB3930 /* Colors.swift */; };
+		31B0E2F626C57D9500DB3930 /* PostPreviewTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31B0E2F526C57D9500DB3930 /* PostPreviewTableViewCell.swift */; };
+		31B0E2F826C57DB000DB3930 /* PostHeaderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31B0E2F726C57DB000DB3930 /* PostHeaderTableViewCell.swift */; };
 		D630EE5E1429AD9EF19FB81D /* Pods_BloggingApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4B63DB0B5832642009EFC58 /* Pods_BloggingApp.framework */; };
 /* End PBXBuildFile section */
 
@@ -53,6 +55,8 @@
 		31B0E2EF26B1D9E900DB3930 /* FrameDimensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameDimensions.swift; sourceTree = "<group>"; };
 		31B0E2F126B3222B00DB3930 /* SignInHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInHeaderView.swift; sourceTree = "<group>"; };
 		31B0E2F326B9C67100DB3930 /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
+		31B0E2F526C57D9500DB3930 /* PostPreviewTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostPreviewTableViewCell.swift; sourceTree = "<group>"; };
+		31B0E2F726C57DB000DB3930 /* PostHeaderTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostHeaderTableViewCell.swift; sourceTree = "<group>"; };
 		C397182CD542AE3C292CC5FC /* Pods-BloggingApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BloggingApp.release.xcconfig"; path = "Target Support Files/Pods-BloggingApp/Pods-BloggingApp.release.xcconfig"; sourceTree = "<group>"; };
 		C4B63DB0B5832642009EFC58 /* Pods_BloggingApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BloggingApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DF53BE9331251162CF4BC85A /* Pods-BloggingApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BloggingApp.debug.xcconfig"; path = "Target Support Files/Pods-BloggingApp/Pods-BloggingApp.debug.xcconfig"; sourceTree = "<group>"; };
@@ -119,6 +123,8 @@
 			children = (
 				311FBAD926AB3305002195E6 /* LaunchScreen.storyboard */,
 				31B0E2F126B3222B00DB3930 /* SignInHeaderView.swift */,
+				31B0E2F526C57D9500DB3930 /* PostPreviewTableViewCell.swift */,
+				31B0E2F726C57DB000DB3930 /* PostHeaderTableViewCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -293,6 +299,8 @@
 				31B0E2F426B9C67100DB3930 /* Colors.swift in Sources */,
 				311FBAF526AB3910002195E6 /* DatabaseManager.swift in Sources */,
 				311FBAED26AB37D3002195E6 /* SignUpViewController.swift in Sources */,
+				31B0E2F626C57D9500DB3930 /* PostPreviewTableViewCell.swift in Sources */,
+				31B0E2F826C57DB000DB3930 /* PostHeaderTableViewCell.swift in Sources */,
 				311FBACF26AB3302002195E6 /* AppDelegate.swift in Sources */,
 				311FBAEB26AB37C3002195E6 /* SignInViewController.swift in Sources */,
 				311FBAE726AB3744002195E6 /* ProfileViewController.swift in Sources */,

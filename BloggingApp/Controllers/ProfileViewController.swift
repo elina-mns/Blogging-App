@@ -37,6 +37,7 @@ class ProfileViewController: UIViewController {
         setUpSignOutButton()
         setUpTable()
         navigationController?.tabBarItem.title = "Profile"
+        fetchPosts()
     }
     
     override func viewDidLayoutSubviews() {
@@ -103,8 +104,7 @@ class ProfileViewController: UIViewController {
     
     @objc func didTapProfilePicture() {
         //"Guard" so user can't change other users' profile pictures
-        guard let myEmail = UserDefaults.standard.string(forKey: "email"),
-              myEmail != currentEmail else { return }
+        guard let myEmail = UserDefaults.standard.string(forKey: "email") else { return }
         
         let picker = UIImagePickerController()
         picker.sourceType = .photoLibrary
@@ -162,7 +162,12 @@ class ProfileViewController: UIViewController {
 extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
     
     func fetchPosts() {
-        
+        DatabaseManager.shared.getAllPostsForUser(forEmail: currentEmail) { [weak self] posts in
+            self?.posts = posts
+            DispatchQueue.main.async {
+                self?.tableView.reloadData()
+            }
+        }
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -172,7 +177,7 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let post = posts[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        cell.textLabel?.text = "Blog posts!"
+        cell.textLabel?.text = post.title
         return cell
     }
     

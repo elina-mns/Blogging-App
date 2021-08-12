@@ -15,7 +15,7 @@ class HomeViewController: UIViewController {
         let button = UIButton()
         button.backgroundColor = Colors().darkViolet
         button.setImage(UIImage(systemName: "square.and.pencil",
-                                withConfiguration: UIImage.SymbolConfiguration(pointSize: 34, weight: .medium)), for: .normal)
+                                withConfiguration: UIImage.SymbolConfiguration(pointSize: 30, weight: .medium)), for: .normal)
         button.tintColor = .black
         button.layer.cornerRadius = 40
         button.layer.shadowColor = UIColor.label.cgColor
@@ -34,8 +34,8 @@ class HomeViewController: UIViewController {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        composeButton.frame = CGRect(x: view.frame.width - 18 - 80,
-                                     y: view.frame.height - 18 - 80 - view.safeAreaInsets.bottom,
+        composeButton.frame = CGRect(x: view.frame.width - 96,
+                                     y: view.frame.height - 96 - view.safeAreaInsets.bottom,
                                      width: 80, height: 80)
     }
     

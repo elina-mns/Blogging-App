@@ -101,22 +101,41 @@ class CreateNewPostViewController: UITabBarController {
               let body = contentTextView.text,
               let image = selectedHeaderImage.image,
               !title.trimmingCharacters(in: .whitespaces).isEmpty,
-              !body.trimmingCharacters(in: .whitespaces).isEmpty else { return }
+              !body.trimmingCharacters(in: .whitespaces).isEmpty else {
+            
+            let alertMessage = UIAlertController(title: "Enter post details", message: "Please enter a title, body and pick an image to continue", preferredStyle: .alert)
+            alertMessage.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: nil))
+            present(alertMessage, animated: true)
+            return
+        }
         
         let postId = UUID().uuidString
         //Upload header image
         StorageManager.shared.uploadHeaderImage(email: email, postId: postId, image: image) { success in
-            guard success else { return }
+            guard success else {
+                print("Failed to upload URL for header")
+                return
+            }
+            
+            //Get url
             StorageManager.shared.downloadURLForPostHeader(email: email, postId: postId) { url in
                 guard let headerURL = url else { return }
                 
                 //Insert post into DB
                 let post = BlogPost(id: postId, title: title, timestamp: Date().timeIntervalSince1970, headerImageURL: headerURL, text: body)
+                
+                DatabaseManager.shared.addBlogPost(withPost: post, email: email) { [weak self] posted in
+                    guard posted else {
+                        print("Failed to post new article")
+                        return
+                    }
+                    DispatchQueue.main.async {
+                        self?.didTapCancel()
+                    }
+                }
             }
         }
-     
     }
-    
 }
 
     //MARK: Image Picker Controller methods

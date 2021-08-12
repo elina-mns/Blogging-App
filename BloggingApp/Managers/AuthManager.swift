@@ -36,7 +36,7 @@ final class AuthManager {
               !password.trimmingCharacters(in: .whitespaces).isEmpty,
               password.count >= 6 else { return }
         auth.signIn(withEmail: email, password: password) { result, error in
-            guard error != nil && error == nil else {
+            guard result != nil && error == nil else {
                 completion(false)
                 return
             }
