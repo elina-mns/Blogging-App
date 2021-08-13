@@ -14,6 +14,7 @@ class ProfileViewController: UIViewController {
     private var tableView: UITableView = {
         let tableView = UITableView()
         tableView.register(PostPreviewTableViewCell.self, forCellReuseIdentifier: PostPreviewTableViewCell.identifier)
+        tableView.separatorStyle = .none
         return tableView
     }()
     private var user: User?
@@ -55,7 +56,7 @@ class ProfileViewController: UIViewController {
     
     private func setUpTableHeader(profilePictureRef: String? = nil, name: String? = nil) {
         //Header View
-        let headerView = UIView(frame: CGRect(x: 0, y: 0, width: view.width, height: view.width))
+        let headerView = UIView(frame: CGRect(x: 0, y: 0, width: view.width/2, height: view.width/2))
         headerView.backgroundColor = UIColor(red: 228/255.0, green: 228/255.0, blue: 249/255.0, alpha: 1)
         tableView.tableHeaderView = headerView
         headerView.isUserInteractionEnabled = true

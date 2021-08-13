@@ -28,6 +28,7 @@ class ViewPostViewController: UITabBarController {
                            forCellReuseIdentifier: "cell")
         tableView.register(PostHeaderTableViewCell.self,
                            forCellReuseIdentifier: PostHeaderTableViewCell.identifier)
+        tableView.separatorStyle = .none
         return tableView
     }()
 
@@ -49,12 +50,8 @@ class ViewPostViewController: UITabBarController {
 
 extension ViewPostViewController: UITableViewDelegate, UITableViewDataSource {
     
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3 //title, image and text
+        return 5 //title, image and text
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -75,8 +72,8 @@ extension ViewPostViewController: UITableViewDelegate, UITableViewDataSource {
         case 2:
             let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
             cell.textLabel?.text = post.text
+            cell.textLabel?.font = .systemFont(ofSize: 18, weight: .medium)
             cell.selectionStyle = .none
-            cell.textLabel?.numberOfLines = 0
         default:
             break
         }

@@ -30,14 +30,15 @@ class HomeViewController: UIViewController {
     private var tableView: UITableView = {
         let tableView = UITableView()
         tableView.register(PostPreviewTableViewCell.self, forCellReuseIdentifier: PostPreviewTableViewCell.identifier)
+        tableView.separatorStyle = .none
         return tableView
     }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
-        view.addSubview(composeButton)
         view.addSubview(tableView)
+        view.addSubview(composeButton)
         composeButton.addTarget(self, action: #selector(didTapCompose), for: .touchUpInside)
         tableView.delegate = self
         tableView.dataSource = self
@@ -86,7 +87,7 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 100
+        return 150
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
