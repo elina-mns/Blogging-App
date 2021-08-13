@@ -43,6 +43,7 @@ class HomeViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         fetchAllPosts()
+        navigationController?.navigationBar.tintColor = .darkGray
     }
     
     override func viewDidLayoutSubviews() {

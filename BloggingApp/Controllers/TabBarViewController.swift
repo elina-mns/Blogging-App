@@ -13,6 +13,7 @@ class TabBarViewController: UITabBarController {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
         setUpControllers()
+        navigationController?.navigationBar.tintColor = .darkGray
     }
     
     private func setUpControllers() {
@@ -41,33 +42,4 @@ class TabBarViewController: UITabBarController {
     }
 }
 
-extension UITabBarController {
-    
-    func addBadge(index: Int, value: Int, color: UIColor, font: UIFont) {
-
-        let itemPosition = CGFloat(index + 1)
-        let itemWidth: CGFloat = tabBar.frame.width / CGFloat(tabBar.items!.count)
-
-        let bgColor = color
-
-        let xOffset: CGFloat = 5
-        let yOffset: CGFloat = -12
-
-        let badgeView = PGTabBadge()
-        badgeView.frame.size =  CGSize(width: 12, height: 12)
-        badgeView.center = CGPoint(x: (itemWidth * itemPosition) - (itemWidth / 2) + xOffset, y: 20 + yOffset)
-        badgeView.layer.cornerRadius = badgeView.bounds.width/2
-        badgeView.clipsToBounds = true
-        badgeView.textColor = UIColor.white
-        badgeView.textAlignment = .center
-        badgeView.font = font
-        badgeView.text = String(value)
-        badgeView.backgroundColor = bgColor
-        badgeView.tag = index
-        tabBar.addSubview(badgeView)
-
-    }
-}
-
-class PGTabBadge: UILabel { }
     

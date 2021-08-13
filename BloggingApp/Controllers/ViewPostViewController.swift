@@ -51,7 +51,7 @@ class ViewPostViewController: UITabBarController {
 extension ViewPostViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 5 //title, image and text
+        return 3 //title, image and text
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -73,6 +73,8 @@ extension ViewPostViewController: UITableViewDelegate, UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
             cell.textLabel?.text = post.text
             cell.textLabel?.font = .systemFont(ofSize: 18, weight: .medium)
+            cell.textLabel?.numberOfLines = 0
+            cell.textLabel?.lineBreakMode = .byWordWrapping
             cell.selectionStyle = .none
         default:
             break
@@ -84,11 +86,11 @@ extension ViewPostViewController: UITableViewDelegate, UITableViewDataSource {
         let index = indexPath.row
         switch index {
         case 0:
-            return UITableView.automaticDimension
+            return 50
         case 1:
             return 150
         case 2:
-            return UITableView.automaticDimension
+            return 200
         default:
             break
         }

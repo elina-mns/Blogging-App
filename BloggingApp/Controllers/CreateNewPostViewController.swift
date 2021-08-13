@@ -25,12 +25,21 @@ class CreateNewPostViewController: UITabBarController {
         return field
     }()
     
+    //Tap to pick an image Label
+    private var label: UILabel = {
+        let label = UILabel()
+        label.text = "Tap to pick an image here!"
+        label.font = .systemFont(ofSize: 20, weight: .medium)
+        label.textColor = .darkGray
+        label.contentMode = .center
+        return label
+    }()
+    
     //Image Header
     private var headerImageView: UIImageView = {
         let headerImageView = UIImageView()
         headerImageView.contentMode = .scaleToFill
         headerImageView.isUserInteractionEnabled = true
-        headerImageView.image = UIImage(systemName: "photo")
         headerImageView.tintColor = .darkGray
         headerImageView.backgroundColor = Colors().lightGreen
         headerImageView.layer.cornerRadius = 8
@@ -48,9 +57,9 @@ class CreateNewPostViewController: UITabBarController {
         let textView = UITextView()
         textView.isEditable = true
         textView.font = .systemFont(ofSize: 16)
+        textView.text = "Enter your post here..."
         textView.layer.cornerRadius = 8
         textView.layer.shadowRadius = 8
-        textView.text = "Enter your post here..."
         textView.textColor = UIColor.lightGray
         return textView
     }()
@@ -61,20 +70,25 @@ class CreateNewPostViewController: UITabBarController {
         view.addSubview(titleField)
         view.addSubview(headerImageView)
         view.addSubview(contentTextView)
+        headerImageView.addSubview(label)
+        contentTextView.delegate = self
         configureButtons()
         configureTapGesture()
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        titleField.frame = CGRect(x: 10, y: view.safeAreaInsets.top + 20, width: view.width - 20, height: 50)
+        titleField.frame = CGRect(x: 30, y: view.safeAreaInsets.top + 30, width: view.width - 60, height: 50)
         headerImageView.frame = CGRect(x: 30, y: titleField.bottom + 30, width: view.width - 60, height: 200)
-        contentTextView.frame = CGRect(x: 20, y: headerImageView.bottom + 20, width: view.width - 40, height: 400)
+        contentTextView.frame = CGRect(x: 30, y: headerImageView.bottom + 20, width: view.width - 60, height: 400)
+        label.frame = CGRect(x: 45, y: headerImageView.safeAreaInsets.top + 50, width: headerImageView.width, height: headerImageView.height/2)
     }
     
     func configureButtons() {
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(didTapCancel))
+        navigationItem.leftBarButtonItem?.tintColor = .darkGray
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Post!", style: .done, target: self, action: #selector(didTapPost))
+        navigationItem.rightBarButtonItem?.tintColor = .darkGray
     }
     
     func configureTapGesture() {
@@ -148,8 +162,28 @@ extension CreateNewPostViewController: UIImagePickerControllerDelegate & UINavig
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         picker.dismiss(animated: true, completion: nil)
+        label.isHidden = true
         guard let image = info[.originalImage] as? UIImage else { return }
         selectedHeaderImage.image = image
         headerImageView.image = image
+    }
+}
+
+     //MARK: Textview Methods for Placeholder
+
+extension CreateNewPostViewController: UITextViewDelegate  {
+    
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.textColor == UIColor.lightGray {
+            textView.text = nil
+            textView.textColor = UIColor.black
+        }
+    }
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if textView.text.isEmpty {
+            textView.text = "Enter your post here..."
+            textView.textColor = UIColor.lightGray
+        }
     }
 }

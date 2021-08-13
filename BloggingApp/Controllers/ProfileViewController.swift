@@ -39,6 +39,7 @@ class ProfileViewController: UIViewController {
         setUpTable()
         navigationController?.tabBarItem.title = "Profile"
         fetchPosts()
+        navigationController?.navigationBar.tintColor = .darkGray
     }
     
     override func viewDidLayoutSubviews() {

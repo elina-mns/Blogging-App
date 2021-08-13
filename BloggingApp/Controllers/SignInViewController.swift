@@ -74,6 +74,7 @@ class SignInViewController: UITabBarController {
         view.addSubview(createAccountButton)
         title = "Sign In"
         view.backgroundColor = .systemBackground
+        navigationController?.navigationBar.tintColor = .darkGray
         
         signInButton.addTarget(self, action: #selector(didTapSignIn), for: .touchUpInside)
         createAccountButton.addTarget(self, action: #selector(didTapCreateAccount), for: .touchUpInside)

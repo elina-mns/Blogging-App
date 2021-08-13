@@ -78,7 +78,7 @@ class SignUpViewController: UITabBarController {
         view.addSubview(createAccountButton)
         title = "Create Account"
         view.backgroundColor = .systemBackground
-        
+        navigationController?.navigationBar.tintColor = .darkGray
         createAccountButton.addTarget(self, action: #selector(didTapCreateAccount), for: .touchUpInside)
     }
     override func viewDidLayoutSubviews() {
