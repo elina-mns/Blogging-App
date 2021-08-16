@@ -17,9 +17,15 @@ class ProfileViewController: UIViewController {
         tableView.separatorStyle = .none
         return tableView
     }()
+    
     private var user: User?
     let currentEmail: String
     private var posts: [BlogPost] = []
+    
+    private var activityIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView()
+        return indicator
+    }()
     
     //MARK: Initializers
     
@@ -40,11 +46,19 @@ class ProfileViewController: UIViewController {
         navigationController?.tabBarItem.title = "Profile"
         fetchPosts()
         navigationController?.navigationBar.tintColor = .darkGray
+        view.addSubview(activityIndicator)
+        activityIndicator.isHidden = true
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        fetchPosts()
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         tableView.frame = view.bounds
+        activityIndicator.frame = CGRect(x: view.center.x, y: view.center.y, width: 15, height: 15)
     }
     
     private func setUpTable() {
@@ -66,13 +80,13 @@ class ProfileViewController: UIViewController {
         //Profile Picture
         let profilePicture = UIImageView(image: UIImage(systemName: "person.circle"))
         profilePicture.tintColor = .lightGray
-        profilePicture.contentMode = .scaleAspectFit
+        profilePicture.contentMode = .scaleToFill
         profilePicture.isUserInteractionEnabled = true
         headerView.addSubview(profilePicture)
-        profilePicture.frame = CGRect(x: (view.width-(view.width/4))/2,
-                                      y: (headerView.height-(view.width/4))/1.8,
-                                      width: view.width/4,
-                                      height: view.width/4)
+        profilePicture.frame = CGRect(x: 100,
+                                      y: 2,
+                                      width: view.width/2,
+                                      height: view.width/2)
         profilePicture.layer.masksToBounds = true
         profilePicture.layer.cornerRadius = profilePicture.width/2
         
@@ -205,13 +219,15 @@ extension ProfileViewController: UIImagePickerControllerDelegate & UINavigationC
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         picker.dismiss(animated: true, completion: nil)
+        activityIndicator.stopAnimating()
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        
+        activityIndicator.stopAnimating()
         picker.dismiss(animated: true, completion: nil)
         guard let image = info[.editedImage] as? UIImage else { return }
         
+        activityIndicator.startAnimating()
         StorageManager.shared.uploadUserProfilePicture(email: currentEmail, image: image) { [weak self] success in
             guard let strongSelf = self else { return }
             if success {
@@ -220,9 +236,11 @@ extension ProfileViewController: UIImagePickerControllerDelegate & UINavigationC
                     guard updated else { return }
                     DispatchQueue.main.async {
                         strongSelf.fetchProfileData()
+                        self?.activityIndicator.stopAnimating()
                     }
                 }
             }
         }
     }
 }
+

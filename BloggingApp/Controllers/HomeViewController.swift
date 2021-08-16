@@ -11,6 +11,11 @@ class HomeViewController: UIViewController {
     
     private var posts: [BlogPost] = []
     
+    private var activityIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView()
+        return indicator
+    }()
+    
     //Floating Button:
     private let composeButton: UIButton = {
         let button = UIButton()
@@ -44,6 +49,8 @@ class HomeViewController: UIViewController {
         tableView.dataSource = self
         fetchAllPosts()
         navigationController?.navigationBar.tintColor = .darkGray
+        view.addSubview(activityIndicator)
+        activityIndicator.isHidden = true
     }
     
     override func viewDidLayoutSubviews() {
@@ -52,11 +59,13 @@ class HomeViewController: UIViewController {
                                      y: view.frame.height - 96 - view.safeAreaInsets.bottom,
                                      width: 80, height: 80)
         tableView.frame = view.bounds
+        activityIndicator.frame = CGRect(x: view.center.x, y: view.center.y, width: 15, height: 15)
     }
     
     @objc func didTapCompose() {
         let vc = CreateNewPostViewController()
         vc.title = "Create Post"
+        vc.tableViewDelegate = self
         let navVC = UINavigationController(rootViewController: vc)
         present(navVC, animated: true)
     }
@@ -65,10 +74,12 @@ class HomeViewController: UIViewController {
 extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
     
     func fetchAllPosts() {
+        activityIndicator.startAnimating()
         DatabaseManager.shared.getAllPosts { [weak self] posts in
             self?.posts = posts
             DispatchQueue.main.async {
                 self?.tableView.reloadData()
+                self?.activityIndicator.stopAnimating()
             }
         }
     }
@@ -95,5 +106,12 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
         tableView.deselectRow(at: indexPath, animated: true)
         let vc = ViewPostViewController(withPost: posts[indexPath.row])
         navigationController?.pushViewController(vc, animated: true)
+    }
+}
+
+extension HomeViewController: CreateNewPostViewControllerDelegate {
+    
+    func updateTableView() {
+        tableView.reloadData()
     }
 }

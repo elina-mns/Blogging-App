@@ -15,7 +15,11 @@ final class AuthManager {
     
     private init() { }
     public var isSignedIn: Bool {
-        return auth.currentUser != nil
+        if auth.currentUser == nil {
+            return false
+        } else {
+            return true
+        }
     }
     
     public func signUp(email: String, password: String, completion: @escaping (Bool) -> Void) {

@@ -7,9 +7,19 @@
 
 import UIKit
 
+protocol CreateNewPostViewControllerDelegate: AnyObject {
+    func updateTableView()
+}
+
 class CreateNewPostViewController: UITabBarController {
     
     //MARK: Properties
+    private var activityIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView()
+        return indicator
+    }()
+    
+    weak var tableViewDelegate: CreateNewPostViewControllerDelegate?
     
     //Title field
     private let titleField: UITextField = {
@@ -70,6 +80,8 @@ class CreateNewPostViewController: UITabBarController {
         view.addSubview(titleField)
         view.addSubview(headerImageView)
         view.addSubview(contentTextView)
+        view.addSubview(activityIndicator)
+        activityIndicator.isHidden = true
         headerImageView.addSubview(label)
         contentTextView.delegate = self
         configureButtons()
@@ -82,6 +94,7 @@ class CreateNewPostViewController: UITabBarController {
         headerImageView.frame = CGRect(x: 30, y: titleField.bottom + 30, width: view.width - 60, height: 200)
         contentTextView.frame = CGRect(x: 30, y: headerImageView.bottom + 20, width: view.width - 60, height: 400)
         label.frame = CGRect(x: 45, y: headerImageView.safeAreaInsets.top + 50, width: headerImageView.width, height: headerImageView.height/2)
+        activityIndicator.frame = CGRect(x: view.center.x, y: view.center.y, width: 15, height: 15)
     }
     
     func configureButtons() {
@@ -110,6 +123,7 @@ class CreateNewPostViewController: UITabBarController {
     }
     
     @objc func didTapPost() {
+        activityIndicator.startAnimating()
         guard let email = UserDefaults.standard.string(forKey: "email"),
               let title = titleField.text,
               let body = contentTextView.text,
@@ -120,6 +134,8 @@ class CreateNewPostViewController: UITabBarController {
             let alertMessage = UIAlertController(title: "Enter post details", message: "Please enter a title, body and pick an image to continue", preferredStyle: .alert)
             alertMessage.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: nil))
             present(alertMessage, animated: true)
+            activityIndicator.stopAnimating()
+            self.tableViewDelegate?.updateTableView()
             return
         }
         
@@ -145,6 +161,7 @@ class CreateNewPostViewController: UITabBarController {
                     }
                     DispatchQueue.main.async {
                         self?.didTapCancel()
+                        self?.activityIndicator.stopAnimating()
                     }
                 }
             }
@@ -158,14 +175,17 @@ extension CreateNewPostViewController: UIImagePickerControllerDelegate & UINavig
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         picker.dismiss(animated: true, completion: nil)
+        activityIndicator.stopAnimating()
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         picker.dismiss(animated: true, completion: nil)
+        activityIndicator.startAnimating()
         label.isHidden = true
         guard let image = info[.originalImage] as? UIImage else { return }
         selectedHeaderImage.image = image
         headerImageView.image = image
+        activityIndicator.stopAnimating()
     }
 }
 
